@@ -1,0 +1,325 @@
+{
+  "@@locale": "en",
+
+  "appName": "EcoGaspi Business",
+  "@appName": {
+    "description": "The name of the application"
+  },
+
+  "appTagline": "Professional marketplace for clearance",
+  "@appTagline": {
+    "description": "The tagline of the application"
+  },
+
+  "welcome": "Welcome!",
+  "welcomeBack": "Welcome back!",
+  "connectToBusinessAccount": "Sign in to your business account",
+  "joinEcoGaspiBusiness": "Join EcoGaspi Business",
+  "sellStocksProfessionals": "Sell your stocks easily between professionals",
+  "alreadyHaveAccount": "Already have an account?",
+  "signIn": "Sign In",
+  "signUp": "Sign Up",
+  "createBusinessAccount": "Create business account",
+  "needHelp": "Need help?",
+  "contactEcoGaspiSupport": "Contact EcoGaspi Support",
+
+  "phoneNumber": "Phone Number",
+  "password": "Password",
+  "firstName": "First Name",
+  "lastName": "Last Name",
+  "businessName": "Business Name",
+  "businessAddress": "Business Address",
+  "walletNumber": "Wallet Number (Mobile Money)",
+  "enterPassword": "Enter your password",
+  "rememberMe": "Remember me",
+  "forgotPassword": "Forgot password?",
+  "signInButton": "Sign In",
+  "continueButton": "Continue",
+  "fastMode": "Fast Mode",
+  "completeMode": "Complete Mode",
+  "additionalInfo": "Additional Information",
+  "rccmOptional": "RCCM (optional)",
+  "patenteOptional": "License (optional)",
+
+  "phoneNumberRequired": "Phone number is required",
+  "passwordRequired": "Password is required",
+  "firstNameRequired": "First name is required",
+  "lastNameRequired": "Last name is required",
+  "businessNameRequired": "Business name is required",
+  "addressRequired": "Address is required",
+  "walletNumberRequired": "Wallet number is required",
+
+  "dashboard": "Dashboard",
+  "products": "Products",
+  "messages": "Messages",
+  "notifications": "Notifications",
+  "profile": "Profile",
+
+  "hello": "Hello, {name}",
+  "@hello": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+
+  "urgentProductsExpiring": "{count} products expire in 2 days",
+  "@urgentProductsExpiring": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "yourPerformance": "Your Performance",
+  "activeProducts": "Active Products",
+  "totalSales": "Total Sales",
+  "averageRating": "Average Rating",
+  "verifiedMerchant": "Verified Merchant",
+  "viewYourPerformance": "View your performance",
+  "manageYourTransactions": "Manage your transactions",
+  "viewCustomerReviews": "View customer reviews",
+  "personalInformation": "Personal Information",
+  "editYourProfile": "Edit your profile",
+  "businessInformation": "Business Information",
+  "businessDetails": "RCCM, license, address...",
+  "manageYourAlerts": "Manage your alerts",
+  "securitySettings": "Password, 2FA...",
+  "faqAndGuides": "FAQ and guides",
+  "weHelpYou": "Have a question? We help you",
+  "improveTogether": "Let's improve EcoGaspi together",
+  "termsAndPrivacy": "Our terms and privacy policy",
+  "confirmSignOut": "Are you sure you want to sign out?",
+  "salesThisMonth": "Sales this Month",
+  "unreadMessages": "Unread Messages",
+  "monthlyRevenue": "Monthly Revenue",
+  "quickActions": "Quick Actions",
+  "publishProduct": "Publish Product",
+  "inLessThan20Seconds": "In less than 20 seconds",
+  "marketplace": "Marketplace",
+  "seeOffers": "See offers",
+  "recentActivity": "Recent Activity",
+
+  "myProducts": "My Products",
+  "active": "Active ({count})",
+  "@active": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "archived": "Archived ({count})",
+  "@archived": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "drafts": "Drafts ({count})",
+  "@drafts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "addProduct": "Add Product",
+  "publishProductTitle": "Publish a Product",
+  "ultraFastPublication": "Ultra-fast publication",
+  "estimatedTime": "Estimated time: {seconds} seconds remaining",
+  "@estimatedTime": {
+    "placeholders": {
+      "seconds": {
+        "type": "int"
+      }
+    }
+  },
+
+  "addPhoto": "Add photo\n(optional)",
+  "productName": "Product Name *",
+  "category": "Category *",
+  "quantity": "Quantity *",
+  "unit": "Unit",
+  "totalPrice": "Total Price *",
+  "expirationDate": "Expiration Date *",
+  "selectDate": "Select date",
+  "automaticSuggestions": "Automatic Suggestions",
+  "preview": "Preview",
+  "publishNow": "Publish Now",
+
+  "nationalMarketplace": "National Marketplace",
+  "allCities": "All Cities",
+  "allCategories": "All Categories",
+  "expiring3Days": "Expiring < 3d",
+  "priceDescending": "Price descending",
+  "wholesalers": "Wholesalers",
+  "lotsPackages": "Lots/Packages",
+  "urgent": "Urgent",
+  "soon": "Soon",
+  "normal": "Normal",
+  "negotiate": "Negotiate",
+
+  "activeConversations": "{count} active conversations",
+  "@activeConversations": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "negotiationsInProgress": "{count} negotiations in progress",
+  "@negotiationsInProgress": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "typing": "Typing...",
+  "offer": "Offer",
+  "negotiation": "Negotiation",
+  "agreement": "Agreement",
+
+  "alerts": "Alerts ({count})",
+  "@alerts": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "messagesTab": "Messages ({count})",
+  "@messagesTab": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "activity": "Activity ({count})",
+  "@activity": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "markAllAsRead": "Mark all as read",
+  "productsSoonExpiring": "Products Soon Expiring",
+  "productsExpireInDays": "{count} products expire in less than {days} days",
+  "@productsExpireInDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "slowRotationDetected": "Slow Rotation Detected",
+  "boostSuggestion": "Boost Suggestion",
+  "apply": "Apply",
+
+  "myBusiness": "My Business",
+  "salesStatistics": "Sales Statistics",
+  "seeYourPerformance": "See your performance",
+  "walletPayments": "Wallet & Payments",
+  "manageTransactions": "Manage your transactions",
+  "reviewsRatings": "Reviews & Ratings",
+  "seeCustomerReviews": "See customer reviews",
+  "settings": "Settings",
+  "personalInfo": "Personal Information",
+  "editProfile": "Edit your profile",
+  "businessInfo": "Business Information",
+  "businessDetails": "RCCM, license, address...",
+  "notificationSettings": "Notifications",
+  "manageAlerts": "Manage your alerts",
+  "security": "Security",
+  "passwordSecurity": "Password, 2FA...",
+  "support": "Support",
+  "helpCenter": "Help Center",
+  "faqGuides": "FAQ and guides",
+  "contactSupport": "Contact Support",
+  "questionWeHelp": "Have a question? We help you",
+  "giveFeedback": "Give Feedback",
+  "improveEcoGaspi": "Let's improve EcoGaspi together",
+  "application": "Application",
+  "about": "About",
+  "version": "Version 1.0.0",
+  "termsOfService": "Terms of Service",
+  "termsAndPrivacy": "Our terms and privacy policy",
+  "signOut": "Sign Out",
+  "signOutConfirm": "Are you sure you want to sign out?",
+  "cancel": "Cancel",
+
+  "language": "Language",
+  "chooseLanguage": "Choose Language",
+  "french": "Français",
+  "arabic": "العربية",
+  "languageChanged": "Language changed successfully",
+
+  "clearanceStocks": "Clear your stocks",
+  "shortDLCProducts": "Short DLC or slow rotation products",
+  "nationalVisibility": "National visibility",
+  "sellEverywhereInCameroon": "Sell everywhere in Cameroon",
+  "directNegotiation": "Direct negotiation",
+  "integratedB2BMessaging": "Integrated B2B messaging",
+
+  "published": "Published!",
+  "productPublishedSuccess": "Your product is now visible on the marketplace. You will receive a notification as soon as a buyer is interested.",
+  "perfect": "Perfect!",
+
+  "codeSent": "Code sent!",
+  "resetCodeSentMessage": "A reset code has been sent to your phone number. Check your SMS.",
+  "understood": "Understood",
+
+  "fastBiometricLogin": "Fast biometric login",
+  "or": "OR",
+
+  "views": "{count} views",
+  "@views": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "expiresInDays": "Expires in {count} day(s)",
+  "@expiresInDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+
+  "fruitsVegetables": "Fruits & Vegetables",
+  "dairy": "Dairy Products",
+  "meatFish": "Meat & Fish",
+  "bakery": "Bakery",
+  "beverages": "Beverages",
+  "processedFoods": "Processed Foods",
+  "spicesCondiments": "Spices & Condiments",
+  "frozenFoods": "Frozen Foods",
+
+  "statusPending": "Pending",
+  "statusConfirmed": "Confirmed",
+  "statusShipped": "Shipped",
+  "statusDelivered": "Delivered",
+  "statusCancelled": "Cancelled",
+
+  "unitKg": "kg",
+  "unitG": "g",
+  "unitL": "L",
+  "unitMl": "mL",
+  "unitPiece": "piece",
+  "unitBox": "box",
+  "unitPack": "pack"
+}
