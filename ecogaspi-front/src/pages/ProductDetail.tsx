@@ -479,6 +479,8 @@ export const ProductDetail: React.FC = () => {
   const [isLoading, setIsLoading] = useState(true);
 
   // En réalité, on récupérerait le produit via l'API avec l'ID
+  // TODO: utiliser l'ID pour récupérer le produit: `/api/products/${id}`
+  console.log('Product ID:', id); // Utilisation temporaire pour éviter l'erreur TypeScript
   const product = mockProduct;
   const timeLeft = formatTimeLeft(product.expiryDate);
   const savings = product.originalPrice - product.discountPrice;

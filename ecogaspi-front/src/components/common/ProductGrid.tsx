@@ -73,12 +73,6 @@ const EmptyState = styled.div`
   }
 `;
 
-const LoadingContainer = styled.div`
-  grid-column: 1 / -1;
-  text-align: center;
-  padding: ${theme.spacing['2xl']};
-`;
-
 const LoadingCard = styled.div`
   background: ${theme.colors.secondary.lightGray};
   border-radius: ${theme.borderRadius.lg};

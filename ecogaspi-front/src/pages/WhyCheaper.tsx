@@ -1,6 +1,6 @@
 import React from 'react';
 import styled, { keyframes } from 'styled-components';
-import { Clock, TrendingDown, Recycle, Heart, ArrowDown, Zap, Target } from 'lucide-react';
+import { Clock, TrendingDown, Recycle, Heart, ArrowDown } from 'lucide-react';
 import { theme } from '../styles/theme';
 
 const slideUp = keyframes`
@@ -12,11 +12,6 @@ const slideUp = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
-`;
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
 `;
 
 const bounce = keyframes`

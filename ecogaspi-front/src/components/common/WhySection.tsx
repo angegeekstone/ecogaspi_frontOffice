@@ -53,7 +53,7 @@ const PriceComparison = styled.div`
   gap: ${theme.spacing.xl};
   padding: ${theme.spacing.xl};
   background: #fafafa;
-  border-radius: ${theme.borderRadius.xl};
+  border-radius: ${theme.borderRadius.lg};
   margin-bottom: 64px;
 
   @media (max-width: ${theme.breakpoints.mobile}) {

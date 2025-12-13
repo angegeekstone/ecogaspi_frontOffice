@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { Search, ArrowRight, Leaf, Users, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
+import { Search, ArrowRight, Leaf, ShoppingCart, ChevronLeft, ChevronRight } from 'lucide-react';
 import { theme } from '../../styles/theme';
 
 const HeroContainer = styled.section`

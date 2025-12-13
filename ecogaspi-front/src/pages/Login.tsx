@@ -17,7 +17,7 @@ const Container = styled.div`
 const LoginCard = styled.div`
   background: white;
   padding: ${theme.spacing['3xl']};
-  border-radius: ${theme.borderRadius.xl};
+  border-radius: ${theme.borderRadius.lg};
   border: 1px solid #e0e0e0;
   width: 100%;
   max-width: 400px;
