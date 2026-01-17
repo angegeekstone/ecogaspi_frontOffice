@@ -1,6 +1,12 @@
 class AppConstants {
   // API Configuration
-  static const String baseUrl = 'https://api.ecogaspi.com';
+  static const String productionBaseUrl = 'https://api.ecogaspi.com';
+  static const String developmentBaseUrl = 'http://10.0.2.2:8080'; // Pour l'émulateur Android
+  static const String localDevelopmentBaseUrl = 'http://localhost:8080'; // Pour les tests locaux
+  static String get baseUrl {
+    // On peut détecter l'environnement ou utiliser une variable d'environnement
+    return String.fromEnvironment('API_BASE_URL', defaultValue: developmentBaseUrl);
+  }
   static const String apiVersion = 'v1';
   static const Duration apiTimeout = Duration(seconds: 30);
 

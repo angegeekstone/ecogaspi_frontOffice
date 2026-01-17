@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class User {
   final String id;
   final String phoneNumber;
@@ -74,4 +76,8 @@ class User {
   }
 
   String get fullName => '$firstName $lastName';
+
+  String toJson() => jsonEncode(toMap());
+
+  factory User.fromJson(String source) => User.fromMap(jsonDecode(source));
 }

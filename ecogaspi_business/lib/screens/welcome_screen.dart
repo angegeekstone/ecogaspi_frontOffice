@@ -76,7 +76,7 @@ class WelcomeScreen extends StatelessWidget {
               const _FeatureCard(
                 icon: Icons.public,
                 title: 'Visibilité nationale',
-                subtitle: 'Vendez partout au Cameroun',
+                subtitle: 'Vendez partout en Côte d\'Ivoire',
               ),
 
               const SizedBox(height: 16),

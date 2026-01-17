@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 class Business {
   final String id;
   final String userId;
@@ -11,6 +13,9 @@ class Business {
   final String? patente;
   final String? merchantCard;
   final String? businessImageUrl;
+  final String? description;
+  final String? city;
+  final String? country;
   final bool isVerified;
   final DateTime createdAt;
   final DateTime updatedAt;
@@ -28,6 +33,9 @@ class Business {
     this.patente,
     this.merchantCard,
     this.businessImageUrl,
+    this.description,
+    this.city,
+    this.country,
     this.isVerified = false,
     required this.createdAt,
     required this.updatedAt,
@@ -47,6 +55,9 @@ class Business {
       'patente': patente,
       'merchantCard': merchantCard,
       'businessImageUrl': businessImageUrl,
+      'description': description,
+      'city': city,
+      'country': country,
       'isVerified': isVerified,
       'createdAt': createdAt.toIso8601String(),
       'updatedAt': updatedAt.toIso8601String(),
@@ -67,6 +78,9 @@ class Business {
       patente: map['patente'],
       merchantCard: map['merchantCard'],
       businessImageUrl: map['businessImageUrl'],
+      description: map['description'],
+      city: map['city'],
+      country: map['country'],
       isVerified: map['isVerified'] ?? false,
       createdAt: DateTime.parse(map['createdAt']),
       updatedAt: DateTime.parse(map['updatedAt']),
@@ -86,6 +100,9 @@ class Business {
     String? patente,
     String? merchantCard,
     String? businessImageUrl,
+    String? description,
+    String? city,
+    String? country,
     bool? isVerified,
     DateTime? createdAt,
     DateTime? updatedAt,
@@ -103,6 +120,9 @@ class Business {
       patente: patente ?? this.patente,
       merchantCard: merchantCard ?? this.merchantCard,
       businessImageUrl: businessImageUrl ?? this.businessImageUrl,
+      description: description ?? this.description,
+      city: city ?? this.city,
+      country: country ?? this.country,
       isVerified: isVerified ?? this.isVerified,
       createdAt: createdAt ?? this.createdAt,
       updatedAt: updatedAt ?? this.updatedAt,
@@ -111,4 +131,8 @@ class Business {
 
   bool get hasCompleteDocuments =>
       rccm != null && patente != null && merchantCard != null;
+
+  String toJson() => jsonEncode(toMap());
+
+  factory Business.fromJson(String source) => Business.fromMap(jsonDecode(source));
 }

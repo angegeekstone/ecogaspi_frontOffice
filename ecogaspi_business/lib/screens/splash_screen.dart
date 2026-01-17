@@ -1,8 +1,11 @@
+import 'package:ecogaspi_business/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 import '../constants/app_colors.dart';
 import '../constants/app_strings.dart';
 import 'main_screen.dart';
+import '../services/auth_check_service.dart';
+import 'auth/registration_summary_screen.dart';
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -23,12 +26,24 @@ class _SplashScreenState extends State<SplashScreen> {
     await Future.delayed(const Duration(seconds: 3));
 
     if (mounted) {
-      // Navigate to main app
-      Navigator.of(context).pushReplacement(
-        MaterialPageRoute(
-          builder: (context) => const MainScreen(),
-        ),
-      );
+      // Vérifier si l'utilisateur est connecté
+      bool isLoggedIn = await AuthService.isLoggedIn();
+
+      if (isLoggedIn) {
+        // Si l'utilisateur est connecté, aller directement à l'écran principal
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const MainScreen(),
+          ),
+        );
+      } else {
+        // Sinon, aller à l'écran d'accueil
+        Navigator.of(context).pushReplacement(
+          MaterialPageRoute(
+            builder: (context) => const WelcomeScreen(),
+          ),
+        );
+      }
     }
   }
 
