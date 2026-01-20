@@ -178,10 +178,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le numéro de téléphone est requis';
+                    return 'Veuillez entrer votre numéro de téléphone';
                   }
-                  if (value.length < 8) {
-                    return 'Le numéro doit contenir au moins 8 chiffres';
+                  if (!RegExp(r'^[\d\s\+\-\(\)]+$').hasMatch(value)) {
+                    return 'Le numéro ne doit contenir que des chiffres, +, -, espaces et parenthèses';
                   }
                   return null;
                 },
@@ -211,7 +211,13 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Le prénom est requis';
+                          return 'Veuillez entrer votre prénom';
+                        }
+                        if (value.length < 2) {
+                          return 'Le prénom doit contenir au moins 2 caractères';
+                        }
+                        if (!RegExp(r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s\-'.]+$").hasMatch(value)) {
+                          return 'Le prénom ne doit contenir que des lettres';
                         }
                         return null;
                       },
@@ -238,7 +244,13 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Le nom est requis';
+                          return 'Veuillez entrer votre nom';
+                        }
+                        if (value.length < 2) {
+                          return 'Le nom doit contenir au moins 2 caractères';
+                        }
+                        if (!RegExp(r"^[a-zA-ZÀ-ÖØ-öø-ÿ\s\-'.]+$").hasMatch(value)) {
+                          return 'Le nom ne doit contenir que des lettres';
                         }
                         return null;
                       },
@@ -268,7 +280,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le nom du commerce est requis';
+                    return 'Veuillez entrer le nom de votre commerce';
+                  }
+                  if (value.length < 3) {
+                    return 'Le nom du commerce doit contenir au moins 3 caractères';
                   }
                   return null;
                 },
@@ -296,7 +311,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 maxLines: 2,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'L\'adresse est requise';
+                    return 'Veuillez entrer l\'adresse de votre commerce';
+                  }
+                  if (value.length < 5) {
+                    return 'L\'adresse doit contenir au moins 5 caractères';
                   }
                   return null;
                 },
@@ -325,10 +343,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 keyboardType: TextInputType.emailAddress,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'L\'email est requis';
+                    return 'Veuillez entrer votre adresse email';
                   }
                   if (!RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(value)) {
-                    return 'Veuillez entrer un email valide';
+                    return 'Format d\'email invalide (ex: exemple@domaine.com)';
                   }
                   return null;
                 },
@@ -356,7 +374,7 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le mot de passe est requis';
+                    return 'Veuillez créer un mot de passe';
                   }
                   if (value.length < 6) {
                     return 'Le mot de passe doit contenir au moins 6 caractères';
@@ -387,10 +405,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 obscureText: true,
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Veuillez confirmer le mot de passe';
+                    return 'Veuillez confirmer votre mot de passe';
                   }
                   if (value != _passwordController.text) {
-                    return 'Les mots de passe ne correspondent pas';
+                    return 'Les mots de passe ne correspondent pas. Veuillez retaper le même mot de passe.';
                   }
                   return null;
                 },
@@ -419,7 +437,10 @@ class _RegistrationScreenState extends ConsumerState<RegistrationScreen> {
                 inputFormatters: [FilteringTextInputFormatter.digitsOnly],
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Le numéro wallet est requis';
+                    return 'Veuillez entrer votre numéro de portefeuille mobile money';
+                  }
+                  if (!RegExp(r'^[\d\s\+\-\(\)]+$').hasMatch(value)) {
+                    return 'Le numéro ne doit contenir que des chiffres, +, -, espaces et parenthèses';
                   }
                   return null;
                 },

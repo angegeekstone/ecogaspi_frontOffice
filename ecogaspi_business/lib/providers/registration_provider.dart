@@ -123,24 +123,35 @@ class RegistrationFormState {
         password == confirmPassword &&
         _isValidEmail(email) &&
         _isValidPhoneNumber(phoneNumber) &&
-        _isValidWalletNumber(walletNumber);
+        _isValidWalletNumber(walletNumber) &&
+        _isValidPassword(password);
   }
 
   // Validation de l'email
   bool _isValidEmail(String email) {
-    return RegExp(r'^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$').hasMatch(email);
+    return RegExp(r'^[a-zA-Z0-9.!#$%&+=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?)*$').hasMatch(email);
   }
 
   // Validation du numéro de téléphone
   bool _isValidPhoneNumber(String phoneNumber) {
-    // Accepte les numéros avec ou sans préfixe international
-    return RegExp(r'^(\+?\d{1,3})?\d{8,15}$').hasMatch(phoneNumber.replaceAll(RegExp(r'[^\d+]'), ''));
+    // Le backend accepte des formats variés, donc on fait une validation minimale
+    // Doit contenir uniquement des chiffres, +, espaces, parenthèses et tirets
+    if (phoneNumber.isEmpty) return false;
+    return RegExp(r'^[\d\s\+\-\(\)]+$').hasMatch(phoneNumber);
   }
 
   // Validation du numéro de wallet
   bool _isValidWalletNumber(String walletNumber) {
-    // Accepte les numéros avec ou sans préfixe international
-    return RegExp(r'^(\+?\d{1,3})?\d{8,15}$').hasMatch(walletNumber.replaceAll(RegExp(r'[^\d+]'), ''));
+    // Le backend accepte des formats variés, donc on fait une validation minimale
+    // Doit contenir uniquement des chiffres, +, espaces, parenthèses et tirets
+    if (walletNumber.isEmpty) return false;
+    return RegExp(r'^[\d\s\+\-\(\)]+$').hasMatch(walletNumber);
+  }
+
+  // Validation du mot de passe
+  bool _isValidPassword(String password) {
+    // Le backend accepte des mots de passe simples, donc on assouplit la validation
+    return password.length >= 6;
   }
 }
 
