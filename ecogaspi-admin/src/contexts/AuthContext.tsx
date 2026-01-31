@@ -101,6 +101,21 @@ interface AuthProviderProps {
 export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   const [state, dispatch] = useReducer(authReducer, initialState);
 
+  // Listen for auto-logout events from apiClient
+  useEffect(() => {
+    const handleAutoLogout = () => {
+      dispatch({ type: 'LOGOUT' });
+      // Redirect to login page
+      window.location.href = '/login';
+    };
+
+    window.addEventListener('autoLogout', handleAutoLogout);
+
+    return () => {
+      window.removeEventListener('autoLogout', handleAutoLogout);
+    };
+  }, []);
+
   // Initialisation au démarrage
   useEffect(() => {
     const initializeAuth = async () => {
@@ -166,10 +181,15 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       await authService.logout();
       dispatch({ type: 'LOGOUT' });
       console.log('✅ Déconnexion réussie');
+
+      // Rediriger vers la page de login
+      window.location.href = '/login';
     } catch (error) {
       console.error('❌ Erreur lors de la déconnexion:', error);
       // Forcer la déconnexion même en cas d'erreur
       dispatch({ type: 'LOGOUT' });
+      // Rediriger même en cas d'erreur
+      window.location.href = '/login';
     }
   };
 
@@ -186,6 +206,8 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
     } catch (error: any) {
       console.error('❌ Impossible de rafraîchir le token:', error);
       dispatch({ type: 'LOGOUT' });
+      // Redirect to login page
+      window.location.href = '/login';
       throw error;
     }
   };

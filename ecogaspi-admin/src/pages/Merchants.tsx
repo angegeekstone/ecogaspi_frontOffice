@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
 import {
   EyeIcon,
   PencilIcon,
@@ -6,75 +6,90 @@ import {
   XMarkIcon,
   MagnifyingGlassIcon,
   FunnelIcon,
+  ExclamationCircleIcon,
 } from '@heroicons/react/24/outline';
 import { Merchant } from '../types';
+import { merchantService } from '../services/merchantService';
 
-const mockMerchants: Merchant[] = [
-  {
-    id: '1',
-    name: 'Amadou Diallo',
-    storeName: 'Épicerie du Quartier',
-    phone: '+221771234567',
-    email: 'amadou.diallo@email.com',
-    address: 'Médina, Dakar',
-    location: { lat: 14.7167, lng: -17.4677 },
-    wallet: '771234567',
-    rccm: 'DK-2023-B-1234',
-    status: 'boutique',
-    verified: true,
-    createdAt: new Date('2023-11-15'),
-    isActive: true,
-  },
-  {
-    id: '2',
-    name: 'Fatou Sall',
-    storeName: 'BioMarket',
-    phone: '+221789876543',
-    address: 'Plateau, Dakar',
-    location: { lat: 14.6928, lng: -17.4467 },
-    wallet: '789876543',
-    status: 'boutique',
-    verified: false,
-    createdAt: new Date('2023-12-01'),
-    isActive: true,
-  },
-  {
-    id: '3',
-    name: 'Moussa Sy',
-    storeName: 'Dépôt Alimentaire Plus',
-    phone: '+221756789123',
-    address: 'Guédiawaye',
-    location: { lat: 14.7692, lng: -17.4092 },
-    wallet: '756789123',
-    rccm: 'DK-2023-B-5678',
-    patente: 'PAT-2023-001',
-    status: 'depot',
-    verified: true,
-    createdAt: new Date('2023-10-20'),
-    isActive: true,
-  },
-];
+interface Pagination {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+}
 
 export const Merchants: React.FC = () => {
-  const [merchants] = useState<Merchant[]>(mockMerchants);
+  const [merchants, setMerchants] = useState<Merchant[]>([]);
+  const [pagination, setPagination] = useState<Pagination>({
+    page: 1,
+    limit: 10,
+    total: 0,
+    totalPages: 0
+  });
   const [searchTerm, setSearchTerm] = useState('');
   const [statusFilter, setStatusFilter] = useState<string>('all');
   const [verificationFilter, setVerificationFilter] = useState<string>('all');
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
-  const filteredMerchants = merchants.filter((merchant) => {
-    const matchesSearch =
-      merchant.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      merchant.storeName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      merchant.phone.includes(searchTerm);
+  const loadMerchants = useCallback(async () => {
+    try {
+      setIsLoading(true);
+      setError(null);
 
-    const matchesStatus = statusFilter === 'all' || merchant.status === statusFilter;
-    const matchesVerification =
-      verificationFilter === 'all' ||
-      (verificationFilter === 'verified' && merchant.verified) ||
-      (verificationFilter === 'unverified' && !merchant.verified);
+      const params = {
+        page: pagination.page,
+        limit: pagination.limit,
+        search: searchTerm || undefined,
+        status: statusFilter !== 'all' ? statusFilter : undefined,
+        verified: verificationFilter === 'verified' ? true : verificationFilter === 'unverified' ? false : undefined
+      };
 
-    return matchesSearch && matchesStatus && matchesVerification;
-  });
+      const response = await merchantService.getMerchants(params);
+
+      if (response.success) {
+        setMerchants(response.data.merchants);
+        setPagination(response.data.pagination);
+      }
+    } catch (error) {
+      console.error('Erreur lors du chargement des commerçants:', error);
+      setError('Erreur lors du chargement des commerçants');
+    } finally {
+      setIsLoading(false);
+    }
+  }, [pagination.page, pagination.limit, searchTerm, statusFilter, verificationFilter]);
+
+  const handleVerifyMerchant = async (merchantId: string) => {
+    try {
+      await merchantService.verifyMerchant(merchantId);
+      await loadMerchants(); // Recharger la liste
+    } catch (error) {
+      console.error('Erreur lors de la vérification:', error);
+    }
+  };
+
+  const handleSuspendMerchant = async (merchantId: string) => {
+    try {
+      await merchantService.suspendMerchant(merchantId, 'Suspendu par l\'administrateur');
+      await loadMerchants(); // Recharger la liste
+    } catch (error) {
+      console.error('Erreur lors de la suspension:', error);
+    }
+  };
+
+  // Charger les données au montage et quand les filtres changent
+  useEffect(() => {
+    loadMerchants();
+  }, [loadMerchants]);
+
+  // Recherche avec debounce
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      loadMerchants();
+    }, 500);
+
+    return () => clearTimeout(timeoutId);
+  }, [searchTerm]);
 
   const getStatusBadge = (status: string) => {
     const styles = {
@@ -156,108 +171,183 @@ export const Merchants: React.FC = () => {
         </div>
       </div>
 
+      {/* Error State */}
+      {error && (
+        <div className="bg-red-50 border border-red-200 rounded-md p-4 mb-6">
+          <div className="flex items-center">
+            <ExclamationCircleIcon className="h-5 w-5 text-red-400 mr-2" />
+            <div className="text-red-700">{error}</div>
+            <button
+              onClick={loadMerchants}
+              className="ml-4 text-red-600 hover:text-red-800 underline"
+            >
+              Réessayer
+            </button>
+          </div>
+        </div>
+      )}
+
       {/* Results count */}
-      <div className="mb-4">
-        <p className="text-sm text-gray-600">
-          {filteredMerchants.length} commerçant(s) trouvé(s)
-        </p>
-      </div>
+      {!error && (
+        <div className="mb-4">
+          <p className="text-sm text-gray-600">
+            {pagination.total} commerçant(s) trouvé(s)
+            {isLoading && ' (Chargement en cours...)'}
+          </p>
+        </div>
+      )}
+
+      {/* Loading State */}
+      {isLoading && !error && (
+        <div className="flex items-center justify-center h-64">
+          <div className="text-lg text-gray-500">Chargement des commerçants...</div>
+        </div>
+      )}
 
       {/* Merchants Table */}
-      <div className="card overflow-hidden">
-        <div className="overflow-x-auto">
-          <table className="min-w-full divide-y divide-gray-200">
-            <thead className="bg-gray-50">
-              <tr>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Commerçant
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Contact
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Type
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Statut
-                </th>
-                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Date d'inscription
-                </th>
-                <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
-                  Actions
-                </th>
-              </tr>
-            </thead>
-            <tbody className="bg-white divide-y divide-gray-200">
-              {filteredMerchants.map((merchant) => (
-                <tr key={merchant.id} className="hover:bg-gray-50">
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div>
-                      <div className="text-sm font-medium text-gray-900">
-                        {merchant.name}
-                      </div>
-                      <div className="text-sm text-gray-500">
-                        {merchant.storeName}
-                      </div>
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
-                    <div>
-                      <div>{merchant.phone}</div>
-                      {merchant.email && (
-                        <div className="text-gray-500">{merchant.email}</div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    {getStatusBadge(merchant.status)}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap">
-                    <div className="flex items-center">
-                      {merchant.verified ? (
-                        <div className="flex items-center text-green-600">
-                          <CheckBadgeIcon className="h-5 w-5 mr-1" />
-                          <span className="text-sm">Vérifié</span>
-                        </div>
-                      ) : (
-                        <div className="flex items-center text-yellow-600">
-                          <XMarkIcon className="h-5 w-5 mr-1" />
-                          <span className="text-sm">En attente</span>
-                        </div>
-                      )}
-                    </div>
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
-                    {merchant.createdAt.toLocaleDateString('fr-FR')}
-                  </td>
-                  <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
-                    <div className="flex items-center justify-end space-x-2">
-                      <button className="text-primary-600 hover:text-primary-900">
-                        <EyeIcon className="h-5 w-5" />
-                      </button>
-                      <button className="text-gray-400 hover:text-gray-600">
-                        <PencilIcon className="h-5 w-5" />
-                      </button>
-                      {!merchant.verified && (
-                        <button className="text-green-600 hover:text-green-800">
-                          <CheckBadgeIcon className="h-5 w-5" />
-                        </button>
-                      )}
-                    </div>
-                  </td>
+      {!isLoading && !error && (
+        <div className="card overflow-hidden">
+          <div className="overflow-x-auto">
+            <table className="min-w-full divide-y divide-gray-200">
+              <thead className="bg-gray-50">
+                <tr>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Commerçant
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Contact
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Type
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Statut
+                  </th>
+                  <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Date d'inscription
+                  </th>
+                  <th className="px-6 py-3 text-right text-xs font-medium text-gray-500 uppercase tracking-wider">
+                    Actions
+                  </th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
+              </thead>
+              <tbody className="bg-white divide-y divide-gray-200">
+                {merchants.map((merchant) => (
+                  <tr key={merchant.id} className="hover:bg-gray-50">
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div>
+                        <div className="text-sm font-medium text-gray-900">
+                          {merchant.name}
+                        </div>
+                        <div className="text-sm text-gray-500">
+                          {merchant.storeName}
+                        </div>
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                      <div>
+                        <div>{merchant.phone}</div>
+                        {merchant.email && (
+                          <div className="text-gray-500">{merchant.email}</div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      {getStatusBadge(merchant.status)}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap">
+                      <div className="flex items-center">
+                        {merchant.verified ? (
+                          <div className="flex items-center text-green-600">
+                            <CheckBadgeIcon className="h-5 w-5 mr-1" />
+                            <span className="text-sm">Vérifié</span>
+                          </div>
+                        ) : (
+                          <div className="flex items-center text-yellow-600">
+                            <XMarkIcon className="h-5 w-5 mr-1" />
+                            <span className="text-sm">En attente</span>
+                          </div>
+                        )}
+                      </div>
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-sm text-gray-500">
+                      {merchant.createdAt.toLocaleDateString('fr-FR')}
+                    </td>
+                    <td className="px-6 py-4 whitespace-nowrap text-right text-sm font-medium">
+                      <div className="flex items-center justify-end space-x-2">
+                        <button
+                          className="text-primary-600 hover:text-primary-900 p-1 rounded"
+                          title="Voir les détails"
+                        >
+                          <EyeIcon className="h-5 w-5" />
+                        </button>
+                        <button
+                          className="text-gray-400 hover:text-gray-600 p-1 rounded"
+                          title="Modifier"
+                        >
+                          <PencilIcon className="h-5 w-5" />
+                        </button>
+                        {!merchant.verified && (
+                          <button
+                            onClick={() => handleVerifyMerchant(merchant.id)}
+                            className="text-green-600 hover:text-green-800 p-1 rounded"
+                            title="Vérifier le commerçant"
+                          >
+                            <CheckBadgeIcon className="h-5 w-5" />
+                          </button>
+                        )}
+                        {merchant.isActive && (
+                          <button
+                            onClick={() => handleSuspendMerchant(merchant.id)}
+                            className="text-red-600 hover:text-red-800 p-1 rounded"
+                            title="Suspendre le commerçant"
+                          >
+                            <XMarkIcon className="h-5 w-5" />
+                          </button>
+                        )}
+                      </div>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
         </div>
-      </div>
+      )}
 
-      {filteredMerchants.length === 0 && (
+      {/* Empty State */}
+      {!isLoading && !error && merchants.length === 0 && (
         <div className="text-center py-12">
           <p className="text-sm text-gray-500">
             Aucun commerçant trouvé avec ces critères.
           </p>
+        </div>
+      )}
+
+      {/* Pagination */}
+      {!isLoading && !error && pagination.totalPages > 1 && (
+        <div className="mt-6 flex items-center justify-between">
+          <div className="flex items-center">
+            <p className="text-sm text-gray-700">
+              Page {pagination.page} sur {pagination.totalPages}
+            </p>
+          </div>
+          <div className="flex space-x-2">
+            <button
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page - 1 }))}
+              disabled={pagination.page <= 1}
+              className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Précédent
+            </button>
+            <button
+              onClick={() => setPagination(prev => ({ ...prev, page: prev.page + 1 }))}
+              disabled={pagination.page >= pagination.totalPages}
+              className="px-3 py-1 border border-gray-300 rounded text-sm disabled:opacity-50 disabled:cursor-not-allowed"
+            >
+              Suivant
+            </button>
+          </div>
         </div>
       )}
     </div>

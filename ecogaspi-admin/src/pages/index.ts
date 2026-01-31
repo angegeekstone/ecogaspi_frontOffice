@@ -3,3 +3,5 @@ export { Merchants } from './Merchants';
 export { Products } from './Products';
 export { Statistics } from './Statistics';
 export { Login } from './Login';
+export { BusinessCategories } from './BusinessCategories';
+export { AnnoncesValidation } from './AnnoncesValidation';

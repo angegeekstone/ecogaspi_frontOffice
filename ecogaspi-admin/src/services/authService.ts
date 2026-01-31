@@ -9,37 +9,38 @@ class AuthService {
 
   async login(credentials: LoginRequest): Promise<LoginResponse> {
     try {
-      const response = await apiClient.post<LoginResponse>(
-        API_ENDPOINTS.auth.login,
-        credentials
-      );
+      // Clear any existing auth data before login attempt
+      this.clearAuthData();
 
-      if (response.success && response.data) {
-        const loginData = response.data;
+      console.log('🔐 Tentative de connexion avec:', credentials.phoneNumber);
+      console.log('🔐 URL utilisée:', API_ENDPOINTS.auth.login);
 
-        // Vérifier que l'utilisateur a des droits d'admin
-        const hasAdminRole = loginData.user.roles.some(role =>
-          role === 'SUPER_ADMIN' || role === 'ADMIN_SHOP'
-        );
+      // Utiliser apiClient pour la cohérence avec le reste de l'application
+      const response = await apiClient.post<LoginResponse>(API_ENDPOINTS.auth.login, credentials);
 
-        if (!hasAdminRole) {
-          throw new Error('Accès non autorisé. Droits administrateur requis.');
-        }
-
-        // Stocker les données d'authentification
-        this.setAuthData(loginData);
-
-        return loginData;
+      if (!response.success || !response.data) {
+        throw new Error(response.message || 'Erreur de connexion inconnue');
       }
 
-      throw new Error('Réponse invalide du serveur');
+      const loginData = response.data;
+      console.log('✅ Connexion réussie, données reçues:', loginData);
+
+      // Vérifier que l'utilisateur a des droits d'admin
+      const hasAdminRole = loginData.user.roles.some(role =>
+        role === 'SUPER_ADMIN' || role === 'ADMIN_SHOP'
+      );
+
+      if (!hasAdminRole) {
+        throw new Error('Accès non autorisé. Droits administrateur requis.');
+      }
+
+      // Stocker les données d'authentification
+      this.setAuthData(loginData);
+
+      return loginData;
     } catch (error: any) {
       console.error('❌ Erreur de connexion:', error);
-      throw new Error(
-        error.response?.data?.message ||
-        error.message ||
-        'Erreur de connexion'
-      );
+      throw error;
     }
   }
 
@@ -72,11 +73,19 @@ class AuthService {
 
   async logout(): Promise<void> {
     try {
-      // Appel API pour logout (optionnel selon l'API)
-      await apiClient.post(API_ENDPOINTS.auth.logout);
+      const token = this.getToken();
+
+      if (token) {
+        // Appel API pour logout côté serveur (optionnel)
+        await apiClient.post(API_ENDPOINTS.auth.logout).catch(error => {
+          console.warn('⚠️ Erreur lors de la déconnexion côté serveur:', error);
+        });
+      }
     } catch (error) {
       console.warn('⚠️ Erreur lors de la déconnexion côté serveur:', error);
     } finally {
+      // Toujours nettoyer les données locales
+      console.log('🔐 Nettoyage des données d\'authentification...');
       this.clearAuthData();
     }
   }
@@ -149,13 +158,18 @@ class AuthService {
 
   // Vérification de l'expiration du token (optionnel)
   isTokenExpired(): boolean {
-    const user = this.getUser();
-    if (!user) return true;
+    const token = this.getToken();
+    if (!token) return true;
 
-    // Si vous avez un champ d'expiration dans votre token
-    // Vous pouvez décoder le JWT et vérifier l'expiration
-    // Pour l'instant, on se base sur la présence du token et de l'utilisateur
-    return !this.getToken();
+    try {
+      // Décoder le JWT pour vérifier l'expiration
+      const payload = JSON.parse(atob(token.split('.')[1]));
+      const currentTime = Math.floor(Date.now() / 1000);
+      return payload.exp < currentTime;
+    } catch (error) {
+      console.error('❌ Erreur lors de la vérification de l\'expiration du token:', error);
+      return true;
+    }
   }
 
   // Méthode pour obtenir l'en-tête d'autorisation

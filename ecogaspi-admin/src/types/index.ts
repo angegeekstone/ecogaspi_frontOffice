@@ -12,6 +12,7 @@ export interface Merchant {
   wallet: string;
   rccm?: string;
   patente?: string;
+  ninea?: string;
   merchantCard?: string;
   storePhoto?: string;
   status: 'boutique' | 'depot' | 'grossiste' | 'industriel';
@@ -20,24 +21,53 @@ export interface Merchant {
   isActive: boolean;
 }
 
+export interface Business {
+  id: number;
+  businessName: string;
+  address: string;
+  city: string;
+  zipCode: string;
+  country: string;
+  latitude: number;
+  longitude: number;
+  walletNumber: string;
+  businessImageUrl?: string;
+  website?: string | null;
+  logoUrl?: string | null;
+  description?: string | null;
+  categoryId: number;
+  isVerified: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
 export interface Product {
-  id: string;
-  merchantId: string;
+  id: number | string; // L'API retourne un nombre, mais on garde la flexibilité
+  businessId: number;
   name: string;
   category: string;
-  quantity: number;
-  unit: string;
-  unitPrice: number;
-  lotPrice: number;
-  expirationDate: Date;
-  photos?: string[];
   description?: string;
-  condition: 'parfait' | 'presque_expire' | 'rotation_lente';
-  location: string;
-  status: 'active' | 'sold' | 'expired' | 'draft';
+  quantity: number;
+  unitPrice: number;
+  bulkPrice: number; // Correspond à lotPrice dans l'ancienne interface
+  unit: string;
+  expirationDate: string; // L'API retourne une chaîne de caractères ISO
+  condition: 'ETAT_PARFAIT' | 'PRESQUE_EXPIRE' | 'ROTATION_LENT' | string; // Adapter les valeurs
+  imageUrls?: string[];
+  primaryImageUrl?: string;
+  isActive: boolean;
+  createdAt: string; // L'API retourne une chaîne de caractères ISO
+  updatedAt: string; // L'API retourne une chaîne de caractères ISO
   views: number;
-  createdAt: Date;
-  updatedAt: Date;
+  location: string;
+  isFeatured: boolean;
+  business?: Business; // Informations sur le commerçant
+  // Anciennes propriétés conservées pour la compatibilité
+  merchantId?: string;
+  lotPrice?: number;
+  photos?: string[];
+  status?: 'active' | 'sold' | 'expired' | 'draft';
+  conditionAncienne?: 'parfait' | 'presque_expire' | 'rotation_lente';
 }
 
 export interface Transaction {
@@ -92,7 +122,7 @@ export interface UserInfo {
   email?: string;
   roles: UserRole[];
   businessId?: string;
-  isVerified: boolean;
+  verified: boolean;
   profileImageUrl?: string;
 }
 
@@ -123,4 +153,27 @@ export interface AdminUser {
   role: 'super_admin' | 'admin' | 'moderator';
   permissions: string[];
   lastLogin: Date;
+}
+
+// Business Categories Types
+export interface BusinessCategory {
+  id: string;
+  name: string;
+  description: string;
+  iconUrl?: string;
+  active: boolean;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateBusinessCategoryRequest {
+  name: string;
+  description: string;
+  iconUrl?: string;
+}
+
+export interface UpdateBusinessCategoryRequest {
+  name: string;
+  description: string;
+  iconUrl?: string;
 }

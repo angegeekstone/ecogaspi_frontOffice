@@ -13,11 +13,11 @@ class Environment {
   constructor() {
     this.config = {
       env: process.env.REACT_APP_ENV || 'development',
-      apiBaseUrl: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080/api',
-      apiVersion: process.env.REACT_APP_API_VERSION || 'v1',
+      apiBaseUrl: process.env.REACT_APP_API_BASE_URL || 'http://localhost:8080',
+      apiVersion: process.env.REACT_APP_API_VERSION || 'api',
       websocketUrl: process.env.REACT_APP_WEBSOCKET_URL || 'ws://localhost:8080/ws',
       uploadBaseUrl: process.env.REACT_APP_UPLOAD_BASE_URL || 'http://localhost:8080/uploads',
-      debug: process.env.REACT_APP_DEBUG === 'true'
+      debug: true // Temporarily enabled for debugging
     };
 
     if (this.config.debug) {
@@ -47,6 +47,10 @@ class Environment {
 
   get fullApiUrl(): string {
     return `${this.config.apiBaseUrl}/${this.config.apiVersion}`;
+  }
+
+  get fullApiUrlV1(): string {
+    return `${this.config.apiBaseUrl}/api/v1`;
   }
 
   get websocketUrl(): string {

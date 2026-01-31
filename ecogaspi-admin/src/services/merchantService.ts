@@ -21,6 +21,7 @@ interface MerchantStats {
 }
 
 class MerchantService {
+
   async getMerchants(params?: MerchantListParams) {
     const queryParams = new URLSearchParams();
 

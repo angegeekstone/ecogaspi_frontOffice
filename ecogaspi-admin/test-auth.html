@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test Auth</title>
+</head>
+<body>
+    <h1>Test Auth</h1>
+    <div id="result"></div>
+    <script>
+        const token = localStorage.getItem('ecogaspi_admin_token');
+        const user = localStorage.getItem('ecogaspi_admin_user');
+        
+        document.getElementById('result').innerHTML = `
+            <p>Token present: ${token ? 'Yes' : 'No'}</p>
+            <p>User present: ${user ? 'Yes' : 'No'}</p>
+            ${user ? `<pre>${user}</pre>` : ''}
+        `;
+    </script>
+</body>
+</html>

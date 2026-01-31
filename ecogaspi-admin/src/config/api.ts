@@ -3,10 +3,10 @@ import env from './environment';
 export const API_ENDPOINTS = {
   // Authentication
   auth: {
-    login: env.buildApiUrl('auth/login'),
-    logout: env.buildApiUrl('auth/logout'),
-    refresh: env.buildApiUrl('auth/refresh'),
-    me: env.buildApiUrl('auth/me')
+    login: 'http://localhost:8080/api/v1/auth/login',
+    logout: 'http://localhost:8080/api/v1/auth/logout',
+    refresh: 'http://localhost:8080/api/v1/auth/refresh',
+    me: 'http://localhost:8080/api/v1/auth/me'
   },
 
   // Merchants
@@ -112,7 +112,7 @@ export const WEBSOCKET_CONFIG = {
 
 // API configuration
 export const API_CONFIG = {
-  timeout: 10000,
+  timeout: 30000, // Augmenté à 30 secondes pour les requêtes potentiellement longues
   retries: 3,
   headers: {
     'Content-Type': 'application/json',

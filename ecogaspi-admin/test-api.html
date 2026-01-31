@@ -1,0 +1,34 @@
+
+
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Test API</title>
+</head>
+<body>
+    <h1>Test API Call</h1>
+    <button onclick="testAPI()">Tester l'API</button>
+    <div id="result"></div>
+
+    <script>
+        async function testAPI() {
+            const token = 'eyJhbGciOiJIUzI1NiJ9.eyJyb2xlcyI6WyJTVVBFUl9BRE1JTiJdLCJzdWIiOiIrMjI1MDc0ODA0OTgwMyIsImlhdCI6MTc2OTA1MjEwNSwiZXhwIjoxNzY5MTM4NTA1fQ.uJG9UTf6ksX5xRCFCn5PwWuaLno9cfiozs5fqm8ktHQ';
+            
+            try {
+                const response = await fetch('http://localhost:8080/api/v1/admin/annonces/pending', {
+                    method: 'GET',
+                    headers: {
+                        'Authorization': `Bearer ${token}`,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                
+                const data = await response.json();
+                document.getElementById('result').innerHTML = '<pre>' + JSON.stringify(data, null, 2) + '</pre>';
+            } catch (error) {
+                document.getElementById('result').innerHTML = '<p>Erreur: ' + error.message + '</p>';
+            }
+        }
+    </script>
+</body>
+</html>
